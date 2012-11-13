@@ -67,5 +67,9 @@ while (@ARGV || $interactive) {
 			}
 			last;
 		}
+		if (/^\+CME ERROR:/) {
+			print STDOUT "ERROR: $_\n";
+			last;
+		}
 	}
 }
