@@ -56,7 +56,8 @@ while (@ARGV || $interactive) {
 	my $ussd_reply;
 	while (<MODEM>) {
 		chomp;
-		print "received from modem: $_\n" if $verbose > 1;
+		chomp;
+		print "< $_\n" if $verbose > 1;
 		if (/^\+CUSD: /) {
 			if (/^\+CUSD: [01],\"([A-F0-9]+)\"/) {
 				my $msg = Device::Gsm::Pdu::pdu_to_latin1($1);
