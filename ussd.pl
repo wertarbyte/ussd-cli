@@ -44,8 +44,12 @@ my $prompt = "USSD> ";
 
 while (@ARGV || $interactive) {
 	my $cmd = shift @ARGV;
-	if (!defined $cmd && $interactive) {
-		$cmd = $term->readline($prompt);
+	if ($interactive) {
+		if (defined $cmd) {
+			$term->addhistory($cmd);
+		} else {
+			$cmd = $term->readline($prompt);
+		}
 	}
 	last unless (defined $cmd);
 	next if ($cmd eq "");
