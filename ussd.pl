@@ -6,6 +6,7 @@
 use strict;
 use Getopt::Long;
 use Device::Gsm::Pdu;
+use Term::ReadLine;
 
 my $dev;
 my $verbose = 0;
@@ -38,13 +39,17 @@ print $USAGE and exit if (!$interactive && !@ARGV) or $help;
 
 open (MODEM, "+>", $dev) || die "Can't open '$dev': $!\n";
 
+my $term = Term::ReadLine->new('ussd-cli');
+my $prompt = "USSD> ";
+
 while (@ARGV || $interactive) {
 	my $cmd = shift @ARGV;
 	if (!defined $cmd && $interactive) {
-		print "> ";
-		$cmd = <STDIN>;
-		chomp($cmd);
+		$cmd = $term->readline($prompt);
 	}
+	last unless (defined $cmd);
+	next if ($cmd eq "");
+
 	print "USSD MSG: $cmd\n" if $verbose;
 	my $ussd_req = substr( Device::Gsm::Pdu::encode_text7($cmd), 2 );
 	print "PDU ENCODED: $ussd_req\n" if $verbose;
